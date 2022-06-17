@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" translatable="false">IMU_Sensor_Collector</string>
+    <string name="title_home" translatable="false">Home</string>
+    <string name="title_dashboard" translatable="false">Dashboard</string>
+    <string name="title_notifications" translatable="false">Notifications</string>
+    <string name="gps_info" translatable="false">GPS Info:</string>
+    <string name="save" translatable="false">Save</string>
+    <string name="start" translatable="false">Start</string>
+    <string name="stop" translatable="false">Stop</string>
+    <string name="accX" translatable="false">ACCELEROMETER X</string>
+    <string name="accY" translatable="false">ACCELEROMETER Y</string>
+    <string name="accZ" translatable="false">ACCELEROMETER Z</string>
+    <string name="gyroX" translatable="false">GYROSCOPE YAW</string>
+    <string name="gyroY" translatable="false">GYROSCOPE PITCH</string>
+    <string name="gyroZ" translatable="false">GYROSCOPE ROLL</string>
+    <string name="magX" translatable="false">MAGNETIC X</string>
+    <string name="magY" translatable="false">MAGNETIC Y</string>
+    <string name="magZ" translatable="false">MAGNETIC Z</string>
+    <string name="count" translatable="false">No of Records</string>
+    <string name="startAt" translatable="false">Start At</string>
+    <string name="lblAcc" translatable="false" tools:ignore="ExtraTranslation">ACCELEROMETER m/s2</string>
+    <string name="lblGyro" translatable="false" tools:ignore="ExtraTranslation">GYROSCOPE rad/s</string>
+    <string name="gps_lat">GPS Lat</string>
+    <string name="filename">FileName:</string>
+    <string name="prefix">Prefix</string>
+    <string name="track">Track</string>
+</resources>

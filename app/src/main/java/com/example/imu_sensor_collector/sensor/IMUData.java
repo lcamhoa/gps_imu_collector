@@ -3,6 +3,7 @@ package com.example.imu_sensor_collector.sensor;
 import androidx.annotation.NonNull;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class IMUData {
 
@@ -26,7 +27,7 @@ public class IMUData {
     public double gpsAtt;
     public float gpsSpeed;
 
-    public LocalDateTime trackTime;
+    public Date trackTime;
 
     @NonNull
     @Override

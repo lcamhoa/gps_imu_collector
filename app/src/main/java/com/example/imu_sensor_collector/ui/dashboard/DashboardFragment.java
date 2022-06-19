@@ -6,19 +6,25 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.imu_sensor_collector.R;
@@ -30,8 +36,7 @@ import com.google.android.gms.location.LocationServices;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.util.Calendar;
 
 public class DashboardFragment extends Fragment implements SensorEventListener {
 
@@ -51,15 +56,37 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
         dashboardViewModel =
                 new ViewModelProvider(this).get(DashboardViewModel.class);
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        FragmentActivity fragmentActivity = getActivity();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(fragmentActivity);
         View root = binding.getRoot();
 
         // Initialize sensor
         // Init sensor
+        final Spinner spinner = (Spinner) binding.hertz;
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(fragmentActivity,
+                R.array.hertz_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String v = (String) adapterView.getItemAtPosition(i);
+                Integer hertz =Integer.valueOf(v.replace("Hz", "")) ;
+                dashboardViewModel.setHertz(hertz);
+                imuDataRepository.setHz(hertz);
+            }
 
-        final int HERTZ = 5; // 5 frame per second
-        imuDataRepository = new IMUDataRepository(HERTZ, dashboardViewModel);
-        sensorManagers = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        imuDataRepository = new IMUDataRepository(dashboardViewModel.getHertz().getValue(), dashboardViewModel);
+        sensorManagers = (SensorManager) fragmentActivity.getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = sensorManagers.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senGyroscope = sensorManagers.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         senMagnetic = sensorManagers.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
@@ -71,6 +98,7 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
             String t = !v.booleanValue() ? getResources().getString(R.string.start) : getResources().getString(R.string.stop);
             btn.setText(t);
         });
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,16 +110,36 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
                 }
             }
         });
+
+        final Button btnClear = binding.btnClear;
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imuDataRepository.clear();
+            }
+        });
+
         final Button btnSave = binding.btnSave2;
         final EditText txtFileNamePrefix = binding.txtFileNamePrefix;
+        txtFileNamePrefix.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(!hasFocus) {
+                    InputMethodManager imm =  (InputMethodManager) fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+        });
+        btnSave.setFocusable(true);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/IMU_Data");
+                String pathName = "IMU_GPS_Collector";
+                File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) , pathName);
                 if (!path.exists()) {
                     path.mkdirs();
                 }
-                final String fileName = txtFileNamePrefix.getText().toString() + "_" + Helper.formatToFileName(LocalDateTime.now()) + ".csv";
+                final String fileName = txtFileNamePrefix.getText().toString() + "_" + Helper.formatToFileName(Calendar.getInstance().getTime()) + ".csv";
                 final File file = new File(path, fileName);
                 try {
                     file.createNewFile();
@@ -184,7 +232,7 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
     }
 
     protected void startTracking() {
-        dashboardViewModel.setStartTime(LocalDateTime.now(ZoneOffset.UTC));
+        dashboardViewModel.setStartTime(Calendar.getInstance().getTime());
         sensorManagers.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManagers.registerListener(this, senGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManagers.registerListener(this, senMagnetic, SensorManager.SENSOR_DELAY_NORMAL);

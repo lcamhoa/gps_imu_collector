@@ -6,11 +6,7 @@ import com.example.imu_sensor_collector.util.Helper;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Deque;
 import java.util.Objects;
 import java.util.Queue;
@@ -47,8 +43,8 @@ public class IMUDataRepository {
             dataRepo.offerLast(ins);
             model.increaseCount();
         } else if( model.getInStart().getValue() ) {
-            LocalDateTime d = LocalDateTime.now(ZoneOffset.UTC);
-            boolean isNew = last.trackTime.toLocalTime().plusNanos( 1000/hz * 1000000).isBefore(d.toLocalTime());
+            Date d = new Date(System.currentTimeMillis() + 1000/hz);
+            boolean isNew = last.trackTime.before(d);
             if(isNew) {
                 IMUData ins = model.toIMUData();
                 dataRepo.offerLast(ins);
@@ -63,7 +59,6 @@ public class IMUDataRepository {
     }
 
     public void writeToFile(File file) throws IOException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss_SSS");
         FileOutputStream fOut = new FileOutputStream(file, false);
         String header = "DATE (YYYY-MO-DD HH-MI-SS_SSS), ACCELEROMETER X (m/s�) , ACCELEROMETER Y (m/s�), " +
                 "ACCELEROMETER Z (m/s�), GYROSCOPE Yaw (rad/s), GYROSCOPE Pitch (rad/s), GYROSCOPE Roll (rad/s), " +

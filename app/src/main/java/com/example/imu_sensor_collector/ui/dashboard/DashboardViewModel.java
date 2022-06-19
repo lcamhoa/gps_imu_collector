@@ -8,6 +8,8 @@ import com.example.imu_sensor_collector.sensor.IMUData;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 public class DashboardViewModel extends ViewModel {
@@ -31,9 +33,10 @@ public class DashboardViewModel extends ViewModel {
     private final MutableLiveData<Double> gpsAtt;
     private final MutableLiveData<Float> gpsSpeed;
 
+    private final MutableLiveData<Integer> hertz;
     private final MutableLiveData<Integer> count;
-    private final MutableLiveData<LocalDateTime> startTime;
-
+    private final MutableLiveData<Date> startTime;
+    public static  final int DEFAULT_HERTZ = 5; // 5 frame per second
     public DashboardViewModel() {
         inStart = new MutableLiveData<>(false);
         accX = new MutableLiveData<>();
@@ -49,8 +52,17 @@ public class DashboardViewModel extends ViewModel {
         gpsLon = new MutableLiveData<>();
         gpsAtt = new MutableLiveData<>();
         gpsSpeed = new MutableLiveData<>();
+        hertz = new MutableLiveData<>(DEFAULT_HERTZ);
         count = new MutableLiveData<>(0);
-        startTime = new MutableLiveData<>(LocalDateTime.now(ZoneOffset.UTC));
+        startTime = new MutableLiveData<>(Calendar.getInstance().getTime());
+    }
+
+    public LiveData<Integer> getHertz() {
+        return hertz;
+    }
+
+    public void setHertz(Integer value) {
+        hertz.setValue(value);
     }
 
     public LiveData<Double> getGPSLat() {
@@ -110,7 +122,7 @@ public class DashboardViewModel extends ViewModel {
         return count;
     }
 
-    public LiveData<LocalDateTime> getStartTime() {
+    public LiveData<Date> getStartTime() {
         return startTime;
     }
 
@@ -166,7 +178,7 @@ public class DashboardViewModel extends ViewModel {
         gpsSpeed.setValue(value);
     }
 
-    public void setStartTime(LocalDateTime value) {
+    public void setStartTime(Date value) {
         startTime.setValue(value);
     }
 
@@ -201,7 +213,7 @@ public class DashboardViewModel extends ViewModel {
         result.gpsLon = Optional.ofNullable(this.gpsLon.getValue()).orElse(0.0d);
         result.gpsAtt = Optional.ofNullable(this.gpsAtt.getValue()).orElse(0.0d);
         result.gpsSpeed = Optional.ofNullable(this.gpsSpeed.getValue()).orElse(0f);
-        result.trackTime = LocalDateTime.now(ZoneOffset.UTC);
+        result.trackTime = Calendar.getInstance().getTime();
         return result;
     }
 }

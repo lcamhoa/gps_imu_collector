@@ -62,9 +62,9 @@ public class IMUDataRepository {
         FileOutputStream fOut = new FileOutputStream(file, false);
         String header = "DATE (YYYY-MO-DD HH-MI-SS_SSS), ACCELEROMETER X (m/s�) , ACCELEROMETER Y (m/s�), " +
                 "ACCELEROMETER Z (m/s�), GYROSCOPE Yaw (rad/s), GYROSCOPE Pitch (rad/s), GYROSCOPE Roll (rad/s), " +
-                "MAGNETIC FIELD X (μT), MAGNETIC FIELD Y (μT), MAGNETIC FIELD Z (μT)\\n";
+                "MAGNETIC FIELD X (μT), MAGNETIC FIELD Y (μT), MAGNETIC FIELD Z (μT)\n";
         fOut.write(header.getBytes());
-        String rowFormat = "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\\n";
+        String rowFormat = "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n";
         for (IMUData itm:  this.dataRepo) {
             String row = String.format(rowFormat, Helper.format(itm.trackTime) ,
                     itm.accX, itm.accY, itm.accZ, itm.gyroX, itm.gyroY,

@@ -18,4 +18,8 @@ public class Helper {
         SimpleDateFormat fileDateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS", Locale.getDefault());
         return fileDateFormat.format(input);
     }
+
+    public static int calMiliscond(int hertz) {
+        return 1000/hertz;
+    }
 }

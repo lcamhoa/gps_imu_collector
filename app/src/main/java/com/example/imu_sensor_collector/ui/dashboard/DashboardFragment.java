@@ -6,9 +6,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,11 @@ import com.example.imu_sensor_collector.databinding.FragmentDashboardBinding;
 import com.example.imu_sensor_collector.sensor.IMUDataRepository;
 import com.example.imu_sensor_collector.util.Helper;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +50,10 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
     private IMUDataRepository imuDataRepository;
 
     private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
+    private Boolean requestingLocationUpdates;
+    private LocationRequest locationRequest;
+
 
     private SensorManager sensorManagers;
     private Sensor senAccelerometer;
@@ -58,6 +67,22 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         FragmentActivity fragmentActivity = getActivity();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(fragmentActivity);
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                Location location = locationResult.getLastLocation();
+                if (location != null) {
+                    dashboardViewModel.setGPSLat(location.getLatitude());
+                    dashboardViewModel.setGPSLon(location.getLongitude());
+                    dashboardViewModel.setGPSAtt(location.getAltitude());
+                    dashboardViewModel.setGPSSpeed(location.getSpeed());
+                }
+                imuDataRepository.persit();
+            }
+        };
         View root = binding.getRoot();
 
         // Initialize sensor
@@ -74,7 +99,7 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String v = (String) adapterView.getItemAtPosition(i);
-                Integer hertz =Integer.valueOf(v.replace("Hz", "")) ;
+                Integer hertz = Integer.valueOf(v.replace("Hz", ""));
                 dashboardViewModel.setHertz(hertz);
                 imuDataRepository.setHz(hertz);
             }
@@ -124,8 +149,8 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
         txtFileNamePrefix.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                if(!hasFocus) {
-                    InputMethodManager imm =  (InputMethodManager) fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (!hasFocus) {
+                    InputMethodManager imm = (InputMethodManager) fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             }
@@ -135,7 +160,7 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 String pathName = "IMU_GPS_Collector";
-                File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) , pathName);
+                File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), pathName);
                 if (!path.exists()) {
                     path.mkdirs();
                 }
@@ -229,13 +254,24 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
 
     protected void stopTracking() {
         sensorManagers.unregisterListener(this);
+        fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
+    @SuppressLint("MissingPermission")
     protected void startTracking() {
         dashboardViewModel.setStartTime(Calendar.getInstance().getTime());
         sensorManagers.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManagers.registerListener(this, senGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManagers.registerListener(this, senMagnetic, SensorManager.SENSOR_DELAY_NORMAL);
+        //int interval = Helper.calMiliscond(dashboardViewModel.getHertz().getValue());
+        locationRequest = LocationRequest.create()
+                .setInterval(10) // milisecond
+                .setFastestInterval(3000)
+                .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                .setMaxWaitTime(100);
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+                locationCallback,
+                Looper.getMainLooper());
     }
 
     private static final String TAG = "IMU";
@@ -267,15 +303,6 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
             default:
                 break;
         }
-        fusedLocationClient.flushLocations();
-        fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), location -> {
-            if (location != null) {
-                dashboardViewModel.setGPSLat(location.getLatitude());
-                dashboardViewModel.setGPSLon(location.getLongitude());
-                dashboardViewModel.setGPSAtt(location.getAltitude());
-                dashboardViewModel.setGPSSpeed(location.getSpeed());
-            }
-        });
         imuDataRepository.persit();
     }
 

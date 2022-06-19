@@ -43,7 +43,7 @@ public class IMUDataRepository {
             dataRepo.offerLast(ins);
             model.increaseCount();
         } else if( model.getInStart().getValue() ) {
-            Date d = new Date(System.currentTimeMillis() + 1000/hz);
+            Date d = new Date(System.currentTimeMillis() + Helper.calMiliscond(hz));
             boolean isNew = last.trackTime.before(d);
             if(isNew) {
                 IMUData ins = model.toIMUData();

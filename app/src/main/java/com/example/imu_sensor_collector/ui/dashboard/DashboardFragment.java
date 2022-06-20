@@ -79,8 +79,11 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
                     dashboardViewModel.setGPSLon(location.getLongitude());
                     dashboardViewModel.setGPSAtt(location.getAltitude());
                     dashboardViewModel.setGPSSpeed(location.getSpeed());
+                    dashboardViewModel.setGPSAccuracy(location.getAccuracy());
                 }
-                imuDataRepository.persit();
+                if(dashboardViewModel.getInStart().getValue()) {
+                    imuDataRepository.persit();
+                }
             }
         };
         View root = binding.getRoot();
@@ -128,11 +131,6 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
             @Override
             public void onClick(View view) {
                 dashboardViewModel.toogleInStart();
-                if (dashboardViewModel.getInStart().getValue()) {
-                    startTracking();
-                } else {
-                    stopTracking();
-                }
             }
         });
 
@@ -197,6 +195,11 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
             gpsSpeed.setText(v.toString());
         });
 
+        final TextView gpsAccuracy = binding.gpsAccuracy;
+        dashboardViewModel.getGPSAccuracy().observe(getViewLifecycleOwner(), (v) -> {
+            gpsAccuracy.setText(v.toString());
+        });
+
         final TextView accX = binding.accX;
         dashboardViewModel.getAccX().observe(getViewLifecycleOwner(), (v) -> {
             accX.setText(v.toString());
@@ -243,12 +246,15 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
         dashboardViewModel.getStartTime().observe(getViewLifecycleOwner(), (v) -> {
             startAt.setText(v.toString());
         });
+
+        startTracking();
         return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        stopTracking();
         binding = null;
     }
 
@@ -303,7 +309,10 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
             default:
                 break;
         }
-        imuDataRepository.persit();
+
+        if(dashboardViewModel.getInStart().getValue()) {
+            imuDataRepository.persit();
+        }
     }
 
     @Override

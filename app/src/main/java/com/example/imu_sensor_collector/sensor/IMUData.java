@@ -26,6 +26,7 @@ public class IMUData {
     public double gpsLon;
     public double gpsAtt;
     public float gpsSpeed;
+    public float gpsAccuracy;
 
     public Date trackTime;
 
@@ -43,6 +44,7 @@ public class IMUData {
         newData.magY = this.magY;
         newData.magZ = this.magZ;
         newData.trackTime = this.trackTime;
+        newData.gpsAccuracy = this.gpsAccuracy;
         return newData;
 
     }

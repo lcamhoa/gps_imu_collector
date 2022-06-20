@@ -60,13 +60,15 @@ public class IMUDataRepository {
 
     public void writeToFile(File file) throws IOException {
         FileOutputStream fOut = new FileOutputStream(file, false);
-        String header = "DATE (YYYY-MO-DD HH-MI-SS_SSS), ACCELEROMETER X (m/s�) , ACCELEROMETER Y (m/s�), " +
+        String header = "DATE (YYYY-MO-DD HH-MI-SS_SSS), GPS LATITUDE (degrees), GPS LONGITUDE (degrees), GPS ALTITUDE (m), " +
+                "GPS SPEED (Kmh), GPS ACCURACY (m), ACCELEROMETER X (m/s�) , ACCELEROMETER Y (m/s�), " +
                 "ACCELEROMETER Z (m/s�), GYROSCOPE Yaw (rad/s), GYROSCOPE Pitch (rad/s), GYROSCOPE Roll (rad/s), " +
                 "MAGNETIC FIELD X (μT), MAGNETIC FIELD Y (μT), MAGNETIC FIELD Z (μT)\n";
         fOut.write(header.getBytes());
-        String rowFormat = "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n";
+        String rowFormat = "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n";
         for (IMUData itm:  this.dataRepo) {
             String row = String.format(rowFormat, Helper.format(itm.trackTime) ,
+                    itm.gpsLat, itm.gpsLon, itm.gpsAtt, itm.gpsSpeed, itm.gpsAccuracy,
                     itm.accX, itm.accY, itm.accZ, itm.gyroX, itm.gyroY,
                     itm.gyroZ, itm.magX, itm.magY, itm.magZ );
             fOut.write(row.getBytes());

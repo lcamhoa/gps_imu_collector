@@ -32,6 +32,7 @@ public class DashboardViewModel extends ViewModel {
     private final MutableLiveData<Double> gpsLon;
     private final MutableLiveData<Double> gpsAtt;
     private final MutableLiveData<Float> gpsSpeed;
+    private final MutableLiveData<Float>  gpsAccuracy;
 
     private final MutableLiveData<Integer> hertz;
     private final MutableLiveData<Integer> count;
@@ -52,6 +53,7 @@ public class DashboardViewModel extends ViewModel {
         gpsLon = new MutableLiveData<>();
         gpsAtt = new MutableLiveData<>();
         gpsSpeed = new MutableLiveData<>();
+        gpsAccuracy = new MutableLiveData<>();
         hertz = new MutableLiveData<>(DEFAULT_HERTZ);
         count = new MutableLiveData<>(0);
         startTime = new MutableLiveData<>(Calendar.getInstance().getTime());
@@ -64,6 +66,15 @@ public class DashboardViewModel extends ViewModel {
     public void setHertz(Integer value) {
         hertz.setValue(value);
     }
+
+    public LiveData<Float> getGPSAccuracy() {
+        return gpsAccuracy;
+    }
+
+    public void setGPSAccuracy(Float value) {
+        gpsAccuracy.setValue(value);
+    }
+
 
     public LiveData<Double> getGPSLat() {
         return gpsLat;
@@ -213,6 +224,7 @@ public class DashboardViewModel extends ViewModel {
         result.gpsLon = Optional.ofNullable(this.gpsLon.getValue()).orElse(0.0d);
         result.gpsAtt = Optional.ofNullable(this.gpsAtt.getValue()).orElse(0.0d);
         result.gpsSpeed = Optional.ofNullable(this.gpsSpeed.getValue()).orElse(0f);
+        result.gpsAccuracy = Optional.ofNullable(this.gpsAccuracy.getValue()).orElse(0f);
         result.trackTime = Calendar.getInstance().getTime();
         return result;
     }

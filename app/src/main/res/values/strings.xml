@@ -7,24 +7,24 @@
     <string name="save" translatable="false">Save</string>
     <string name="start" translatable="false">Start</string>
     <string name="stop" translatable="false">Stop</string>
-    <string name="accX" translatable="false">ACCELEROMETER X</string>
-    <string name="accY" translatable="false">ACCELEROMETER Y</string>
-    <string name="accZ" translatable="false">ACCELEROMETER Z</string>
-    <string name="gyroX" translatable="false">GYROSCOPE YAW</string>
-    <string name="gyroY" translatable="false">GYROSCOPE PITCH</string>
-    <string name="gyroZ" translatable="false">GYROSCOPE ROLL</string>
-    <string name="magX" translatable="false">MAGNETIC X</string>
-    <string name="magY" translatable="false">MAGNETIC Y</string>
-    <string name="magZ" translatable="false">MAGNETIC Z</string>
-    <string name="count" translatable="false">No of Records</string>
-    <string name="startAt" translatable="false">Start At</string>
+    <string name="accX" translatable="false">ACCELEROMETER X (m/s2) : </string>
+    <string name="accY" translatable="false">ACCELEROMETER Y (m/s2) : </string>
+    <string name="accZ" translatable="false">ACCELEROMETER Z (m/s2) : </string>
+    <string name="gyroX" translatable="false">GYROSCOPE YAW (rad/s) : </string>
+    <string name="gyroY" translatable="false">GYROSCOPE PITCH (rad/s) : </string>
+    <string name="gyroZ" translatable="false">GYROSCOPE ROLL (rad/s) : </string>
+    <string name="magX" translatable="false">MAGNETIC X (μT) : </string>
+    <string name="magY" translatable="false">MAGNETIC Y (μT) : </string>
+    <string name="magZ" translatable="false">MAGNETIC Z (μT) : </string>
+    <string name="count" translatable="false">No of Records : </string>
+    <string name="startAt" translatable="false">Start At : </string>
     <string name="lblAcc" translatable="false" tools:ignore="ExtraTranslation">ACCELEROMETER m/s2</string>
     <string name="lblGyro" translatable="false" tools:ignore="ExtraTranslation">GYROSCOPE rad/s</string>
-    <string name="gps_lat">GPS Lat</string>
+    <string name="gps_lat">GPS LATITUDE (degrees): </string>
     <string name="filename">FileName:</string>
     <string name="prefix">Prefix</string>
     <string name="track">Track</string>
-    <string name="gps_lon">GPS Lon</string>
+    <string name="gps_lon">GPS LONGITUDE (degrees): </string>
     <string-array name="hertz_array">
         <item>5Hz</item>
         <item>10Hz</item>

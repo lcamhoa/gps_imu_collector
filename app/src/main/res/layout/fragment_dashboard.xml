@@ -207,8 +207,6 @@
                     android:id="@+id/gpsLon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-
                     android:layout_span="2"
                     android:textAlignment="viewStart"
                     android:textSize="12sp"
@@ -226,9 +224,7 @@
                     android:id="@+id/lblGPSAtt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-
-                    android:text="GPS Altitude"
+                    android:text="GPS ALTITUDE (m): "
                     android:textAlignment="viewStart"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -240,8 +236,6 @@
                     android:id="@+id/gpsAtt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-
                     android:layout_span="2"
                     android:textAlignment="viewStart"
                     android:textSize="12sp"
@@ -259,9 +253,7 @@
                     android:id="@+id/lblGPSSpeed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-
-                    android:text="GPS Speed"
+                    android:text="GPS Speed (Kmh): "
                     android:textAlignment="viewStart"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -273,8 +265,6 @@
                     android:id="@+id/gpsSpeed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-
                     android:layout_span="2"
                     android:textAlignment="viewStart"
                     android:textSize="12sp"
@@ -283,17 +273,41 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </TableRow>
-
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/lblGPSAccuracy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="GPS Accuracy (m) :"
+                    android:textAlignment="viewStart"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/gpsAccuracy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_span="2"
+                    android:textAlignment="viewStart"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
                     android:id="@+id/lblAcc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-
                     android:text="@string/accX"
                     android:textAlignment="viewStart"
                     android:textSize="12sp"

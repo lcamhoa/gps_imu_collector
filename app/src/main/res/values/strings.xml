@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name" translatable="false">IMU_Sensor_Collector</string>
+    <string name="app_name" translatable="false">IMU Sensor Collector</string>
     <string name="title_home" translatable="false">Home</string>
-    <string name="title_dashboard" translatable="false">Dashboard</string>
+    <string name="title_dashboard" translatable="false">Tracking</string>
     <string name="title_notifications" translatable="false">Notifications</string>
     <string name="gps_info" translatable="false">GPS Info:</string>
     <string name="save" translatable="false">Save</string>
@@ -21,10 +21,11 @@
     <string name="lblAcc" translatable="false" tools:ignore="ExtraTranslation">ACCELEROMETER m/s2</string>
     <string name="lblGyro" translatable="false" tools:ignore="ExtraTranslation">GYROSCOPE rad/s</string>
     <string name="gps_lat">GPS LATITUDE (degrees): </string>
-    <string name="filename">FileName:</string>
+    <string name="filename">FileName prefix:</string>
     <string name="prefix">Prefix</string>
     <string name="track">Track</string>
     <string name="gps_lon">GPS LONGITUDE (degrees): </string>
+    <string name="refresh">Refresh</string>
     <string-array name="hertz_array">
         <item>5Hz</item>
         <item>10Hz</item>

@@ -93,6 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Hertz"
+                    android:focusable="true"
                     android:textAlignment="viewStart"
                     android:textSize="12sp"
                     tools:ignore="SpeakableTextPresentCheck" />
@@ -120,7 +121,6 @@
                     android:layout_height="wrap_content"
                     android:layout_span="2"
                     android:autofillHints=""
-                    android:focusable="auto"
                     android:hint="@string/prefix"
                     android:maxLength="10"
                     android:text="@string/track"

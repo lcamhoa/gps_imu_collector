@@ -45,6 +45,8 @@ import java.util.Calendar;
 
 public class DashboardFragment extends Fragment implements SensorEventListener {
 
+    public static final String  DATA_FOLDER = "IMU_GPS_Collector";
+
     private FragmentDashboardBinding binding;
     private DashboardViewModel dashboardViewModel;
     private IMUDataRepository imuDataRepository;
@@ -157,8 +159,7 @@ public class DashboardFragment extends Fragment implements SensorEventListener {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String pathName = "IMU_GPS_Collector";
-                File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), pathName);
+                File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), DATA_FOLDER);
                 if (!path.exists()) {
                     path.mkdirs();
                 }
